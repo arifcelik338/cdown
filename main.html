@@ -22,17 +22,30 @@
             padding-bottom: 120px;
         }
 
-        .container {
-            text-align: center;
-            background: rgba(20, 10, 35, 0.8);
-            padding: 50px;
-            border-radius: 15px;
-            border: 2px solid #8b4789;
-            box-shadow: 0 0 30px rgba(139, 71, 137, 0.5), 
-                        inset 0 0 20px rgba(139, 71, 137, 0.2);
-            max-width: 500px;
-            width: 100%;
-        }
+/* Masaüstü ve genel ayarlar zaten sende var, ama container'ı şöyle güncelle: */
+.container {
+    width: 90%;          /* Mobilde ekranın %90'ını kaplasın */
+    max-width: 500px;    /* Ama bilgisayarda 500px'i geçmesin */
+    padding: 20px;       /* İç boşluğu biraz daraltalım */
+    margin: 20px auto;   /* Ortalamayı garantileyelim */
+}
+
+/* SADECE MOBİL İÇİN (Ekran 600px'den küçükse): */
+@media (max-width: 600px) {
+    h2 {
+        font-size: 1.5rem; /* Başlık telefonda biraz daha küçük olsun */
+    }
+    
+    input[type="text"], button {
+        padding: 15px;      /* Parmakla basmak kolay olsun diye butonları büyütelim */
+        font-size: 16px;    /* Mobilde 16px altı fontlar bazen ekranın otomatik zoom yapmasına neden olur */
+    }
+
+    .container {
+        padding: 15px;      /* Mobilde ekran alanı değerli, boşlukları kısalım */
+        width: 95%;         /* Telefonda iyice yayılsın */
+    }
+}
 
         h2 {
             font-size: 2.5em;
