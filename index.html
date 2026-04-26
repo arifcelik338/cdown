@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C DoWn Downlander </title>
     <style>
         * {
@@ -176,33 +176,35 @@
     </footer>
     <script>
         async function videoyuBul() {
-            const sonucAlani = document.getElementById('sonucAlani');
-            const url = document.getElementById('linkGirdisi').value;
-            
-            sonucAlani.innerHTML = "Aranıyor, lütfen bekleyin...";
+    const sonucAlani = document.getElementById('sonucAlani');
+    const url = document.getElementById('linkGirdisi').value; // Burada adı 'url' koyduk
+    
+    sonucAlani.innerHTML = "Aranıyor, lütfen bekleyin...";
 
-            try {
-                const response = await fetch(`https://arifcelik338-cdown.hf.space/link-coz?video_url=${videoUrl}`);
-                const veri = await apiCevabi.json();
+    try {
+        // FETCH İÇİNDE: `${url}` olarak düzelttim (yukarıdakiyle aynı olmalı)
+        const response = await fetch(`https://arifcelik338-cdown.hf.space/link-coz?video_url=${url}`);
+        
+        // JSON ÇEVİRİRKEN: 'response.json()' olarak düzelttim (yukarıdaki değişkenle aynı olmalı)
+        const veri = await response.json();
 
-                if(veri.durum === "basarili") {
-                    sonucAlani.innerHTML = `
-                        <img src="${veri.kapak}" style="width:100%; border-radius:10px; margin-bottom:15px; border: 2px solid #333;">
-                        
-                        <p><strong>${veri.baslik}</strong></p>
-                        
-                        <a href="${veri.indirme_linki}" target="_blank">
-                            <button class="indir-btn">Hemen İndir</button>
-                        </a>
-                    `;
-                } else {
-                    sonucAlani.innerHTML = `<p style="color:red;">Hata: ${veri.mesaj}</p>`;
-                }
-
-            } catch (hata) {
-                sonucAlani.innerHTML = "Sunucuya bağlanılamadı.";
-            }
+        if(veri.durum === "basarili") {
+            sonucAlani.innerHTML = `
+                <img src="${veri.kapak}" style="width:100%; border-radius:10px; margin-bottom:15px; border: 2px solid #333;">
+                <p><strong>${veri.baslik}</strong></p>
+                <a href="${veri.indirme_linki}" target="_blank">
+                    <button class="indir-btn">Hemen İndir</button>
+                </a>
+            `;
+        } else {
+            sonucAlani.innerHTML = `<p style="color:red;">Hata: ${veri.mesaj}</p>`;
         }
+
+    } catch (hata) {
+        console.error(hata); // Hatanın ne olduğunu tarayıcı konsolunda görebilmek için
+        sonucAlani.innerHTML = "Sunucuya bağlanılamadı. Lütfen API linkini ve internetini kontrol et.";
+    }
+}
     </script>
 </body>
 </html>
