@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C DoWn Downlander </title>
+    <title>C DoWn Downloader</title>
     <style>
         * {
             margin: 0;
@@ -22,34 +22,28 @@
             padding-bottom: 120px;
         }
 
-/* Masaüstü ve genel ayarlar zaten sende var, ama container'ı şöyle güncelle: */
-.container {
-    width: 90%;          /* Mobilde ekranın %90'ını kaplasın */
-    max-width: 500px;    /* Ama bilgisayarda 500px'i geçmesin */
-    padding: 20px;       /* İç boşluğu biraz daraltalım */
-    margin: 20px auto;   /* Ortalamayı garantileyelim */
-}
+        .container {
+            width: 100%;         
+            max-width: 500px;  
+            padding: 40px 30px;      
+            margin: 20px auto; 
+            background: rgba(20, 10, 35, 0.85);
+            border: 2px solid #8b4789;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(139, 71, 137, 0.4), inset 0 0 15px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
 
-/* SADECE MOBİL İÇİN (Ekran 600px'den küçükse): */
-@media (max-width: 600px) {
-    h2 {
-        font-size: 1.5rem; /* Başlık telefonda biraz daha küçük olsun */
-    }
-    
-    input[type="text"], button {
-        padding: 15px;      /* Parmakla basmak kolay olsun diye butonları büyütelim */
-        font-size: 16px;    /* Mobilde 16px altı fontlar bazen ekranın otomatik zoom yapmasına neden olur */
-    }
-
-    .container {
-        padding: 15px;      /* Mobilde ekran alanı değerli, boşlukları kısalım */
-        width: 95%;         /* Telefonda iyice yayılsın */
-    }
-}
+        @media (max-width: 600px) {
+            h2 { font-size: 1.8rem; }
+            input[type="text"], button { padding: 15px; font-size: 16px; }
+            .container { padding: 25px 15px; width: 95%; }
+        }
 
         h2 {
             font-size: 2.5em;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             color: #d4a574;
             text-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
             letter-spacing: 2px;
@@ -61,7 +55,7 @@
             width: 100%;
             max-width: 350px;
             padding: 12px 15px;
-            margin: 15px 0;
+            margin: 10px 0 20px 0;
             background: rgba(60, 30, 90, 0.6);
             border: 2px solid #8b4789;
             color: #e0d5ff;
@@ -73,6 +67,7 @@
 
         input[type="text"]::placeholder {
             color: #b09acc;
+            text-align: center;
         }
 
         input[type="text"]:focus {
@@ -84,7 +79,7 @@
 
         button {
             padding: 12px 30px;
-            margin: 15px 0;
+            margin: 10px 0;
             background: linear-gradient(135deg, #8b4789 0%, #5d2e61 100%);
             color: #d4a574;
             border: 2px solid #d4a574;
@@ -96,6 +91,8 @@
             letter-spacing: 1px;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px rgba(212, 165, 116, 0.3);
+            width: 100%;
+            max-width: 350px;
         }
 
         button:hover {
@@ -108,31 +105,16 @@
             transform: scale(0.98);
         }
 
-        #sonucAlani {
-            margin-top: 30px;
+        #resultArea {
+            margin-top: 25px;
             min-height: 50px;
-            text-align: center;
+            text-align: center; 
         }
 
-        #sonucAlani p {
-            font-size: 16px;
-            margin: 10px 0;
-            line-height: 1.6;
-        }
-
-        #sonucAlani p strong {
-            color: #d4a574;
-            text-shadow: 0 0 5px rgba(212, 165, 116, 0.5);
-        }
-
-        #sonucAlani a {
-            text-decoration: none;
-        }
-
-        #sonucAlani button {
-            width: 100%;
-            max-width: 300px;
-        }
+        #resultArea p { font-size: 16px; margin: 10px 0; line-height: 1.6; }
+        #resultArea p strong { color: #d4a574; text-shadow: 0 0 5px rgba(212, 165, 116, 0.5); }
+        #resultArea a { text-decoration: none; }
+        #resultArea button { width: 100%; max-width: 350px; }
 
         footer {
             position: fixed;
@@ -164,47 +146,55 @@
 </head>
 <body>
     <div class="container">
-        <h2>C DoWn Downlander </h2>
-        <input type="text" id="linkGirdisi" placeholder="YouTube linkini yapıştır">
-        <button onclick="videoyuBul()">Bul</button>
+        <h2>C DoWn Downloader</h2>
+        <input type="text" id="linkInput" placeholder="Paste Video link Here">
+        <button onclick="findVideo()">Find</button>
 
-        <div id="sonucAlani"></div>
+        <div id="resultArea"></div>
     </div>
 
     <footer>
         <a href="https://youtube.com/@arifcelik1" target="_blank">Arif Çelik</a>
     </footer>
-    <script>
-        async function videoyuBul() {
-    const sonucAlani = document.getElementById('sonucAlani');
-    const url = document.getElementById('linkGirdisi').value; // Burada adı 'url' koyduk
     
-    sonucAlani.innerHTML = "Aranıyor, lütfen bekleyin...";
+    <script>
+        async function findVideo() {
+            const resultArea = document.getElementById('resultArea');
+            const linkInput = document.getElementById('linkInput');
+            const url = linkInput.value;
+            
+            if (!url) {
+                resultArea.innerHTML = "<p style='color: #d4a574;'>Please enter a link first.</p>";
+                return;
+            }
+            
+            resultArea.innerHTML = "Searching, please wait...";
 
-    try {
-        // FETCH İÇİNDE: `${url}` olarak düzelttim (yukarıdakiyle aynı olmalı)
-        const response = await fetch(`https://arifcelik338-cdown.hf.space/link-coz?video_url=${url}`);
-        
-        // JSON ÇEVİRİRKEN: 'response.json()' olarak düzelttim (yukarıdaki değişkenle aynı olmalı)
-        const veri = await response.json();
+            try {
+                const apiResponse = await fetch(`http://localhost:8000/link-coz?video_url=${url}`);
+                const data = await apiResponse.json();
 
-        if(veri.durum === "basarili") {
-            sonucAlani.innerHTML = `
-                <img src="${veri.kapak}" style="width:100%; border-radius:10px; margin-bottom:15px; border: 2px solid #333;">
-                <p><strong>${veri.baslik}</strong></p>
-                <a href="${veri.indirme_linki}" target="_blank">
-                    <button class="indir-btn">Hemen İndir</button>
-                </a>
-            `;
-        } else {
-            sonucAlani.innerHTML = `<p style="color:red;">Hata: ${veri.mesaj}</p>`;
+                if(data.durum === "basarili") {
+                    // YENİ: Doğrudan indirme yerine Python köprüsüne (video-indir) istek atıyoruz
+                    const proxyUrl = `http://localhost:8000/video-indir?url=${encodeURIComponent(data.indirme_linki)}&baslik=${encodeURIComponent(data.baslik)}`;
+
+                    resultArea.innerHTML = `
+                        <img src="${data.kapak}" style="width:100%; border-radius:10px; margin-bottom:15px; border: 2px solid #8b4789; box-shadow: 0 0 10px rgba(139, 71, 137, 0.3);">
+                        
+                        <p><strong>${data.baslik}</strong></p>
+                        
+                        <a href="${proxyUrl}" onclick="document.getElementById('linkInput').value = '';">
+                            <button class="indir-btn">Download Now</button>
+                        </a>
+                    `;
+                } else {
+                    resultArea.innerHTML = `<p style="color:#d4a574;">Error: ${data.mesaj}</p>`;
+                }
+
+            } catch (error) {
+                resultArea.innerHTML = "<p style='color:#d4a574;'>Could not connect to the server.</p>";
+            }
         }
-
-    } catch (hata) {
-        console.error(hata); // Hatanın ne olduğunu tarayıcı konsolunda görebilmek için
-        sonucAlani.innerHTML = "Sunucuya bağlanılamadı. Lütfen API linkini ve internetini kontrol et.";
-    }
-}
     </script>
 </body>
 </html>
