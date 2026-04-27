@@ -1,0 +1,48 @@
+name: Multi-Platform Build
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    # Bu satır GitHub'a 3 farklı PC açmasını söyler
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install fastapi uvicorn yt-dlp
+
+    # Sadece Windows için Inno Setup çalıştırır
+    - name: Build Windows Installer
+      if: matrix.os == 'windows-latest'
+      run: |
+        choco install innosetup
+        iscc script.iss
+
+    # Mac ve Linux için dosyaları ZIP haline getirir
+    - name: Archive Project
+      if: matrix.os != 'windows-latest'
+      run: |
+        zip -r C-Down-${{ matrix.os }}.zip . -x "*.git*"
+
+    - name: Upload Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: C-Down-Package-${{ matrix.os }}
+        path: |
+          Output/*.exe
+          *.zip
